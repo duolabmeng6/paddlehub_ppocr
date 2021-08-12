@@ -254,21 +254,6 @@ docker tag paddlehub_ppocr:1.0 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ```
 
-
-## 部署到阿里云函数计算
-
-容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
-
-启动命令 `["sh","/PaddleOCR/start.sh"]`
-
-需要绑定域名
-
-识别地址就是 http://绑定域名/predict/ocr_system
-
-![2](./demo/2.png)
-
-![3](./demo/3.png)
-
 ## 部署到阿里云函数计算
 
 在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
