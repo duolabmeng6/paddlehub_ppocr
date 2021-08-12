@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  ppocr:
+    build: ./
+    privileged: false
+    restart: always
+    ports:
+      - 9000:9000
+
+  
