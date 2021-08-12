@@ -262,7 +262,7 @@ docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
 * 了解 docker 镜像制作与推送
 * 云函数中报错解决思路
 
-### 分析 docker 文件中写出的文件
+### 分析 docker 中写出的文件
 
 将我们前面部署好的镜像，在自己电脑上运行起来
 
