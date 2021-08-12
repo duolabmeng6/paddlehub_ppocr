@@ -93,6 +93,7 @@ docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppo
 docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
 ```
 推送镜像至腾讯云以后就可以创建云函数了
+
 识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
 
 ![4](./demo/4.png)
