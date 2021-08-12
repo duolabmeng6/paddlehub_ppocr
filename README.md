@@ -1,4 +1,9 @@
-# 用 docker 部署  PaddleOCR 开箱即用 通用文字识别
+# 基于Serverless架构部署通用文字识别 PaddleOCR
+# 项目背景
+# 项目开发
+# docker运行环境构建
+# 部署到函数计算
+# 总结
 
 https://github.com/PaddlePaddle/PaddleOCR
 
