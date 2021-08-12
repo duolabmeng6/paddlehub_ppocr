@@ -271,7 +271,7 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ![3](./demo/3.png)
 
 
-## 部署到腾讯云函数计算
+## 部署到腾讯云函数
 
 由于腾讯云云函数容器的文件的限制只允许 `/tmp` 可读可写，所以我们需要修改代码以支持云函数的部署。
 
