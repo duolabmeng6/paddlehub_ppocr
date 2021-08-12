@@ -1,5 +1,3 @@
-[toc]
-
 # 基于 Serverless 架构部署通用文字识别 PaddleOCR
 
 [![github stars](https://img.shields.io/github/stars/duolabmeng6/paddlehub_ppocr?style=social)](https://github.com/duolabmeng6/paddlehub_ppocr)
