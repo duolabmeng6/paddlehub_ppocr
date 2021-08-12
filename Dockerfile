@@ -1,6 +1,4 @@
-# Version: 2.0.0
 FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
-
 
 COPY PaddleOCR /PaddleOCR
 

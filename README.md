@@ -162,10 +162,10 @@ rm -rf /root/.cache/* \
 
 ## 编写 Dockerfile
 
-```
-# Version: 2.0.0
-FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
+上面的过程是构建飞浆的基础运行环境的 那么以后就可以用该基础镜像部署任意飞浆模型了
 
+```
+FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
 
 COPY PaddleOCR /PaddleOCR
 
