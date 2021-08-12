@@ -12,7 +12,7 @@ PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
 
 这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器或函数计算中
 
-(PaddleOCR docker 镜像地址)[https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr]
+[PaddleOCR docker 镜像地址](https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr)
 
 ## 部署 PaddleOCR 到本地
 
@@ -41,7 +41,7 @@ curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0K
 
 ## 调用 OCR 代码示例
 
-(查看调用代码示例) [https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo]
+[查看调用代码示例](https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo)
 
 ![1](./demo/1.png)
 
