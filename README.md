@@ -366,10 +366,10 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 
 在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中，可提供稳定可靠弹性的推理服务。
 
-# 鸣谢
+# 鸣谢各厂商大佬提供的技术支持
 
-* 腾讯云函数 
-* 阿里云函数计算 
+* 腾讯云函数 https://cloud.tencent.com/product/scf
+* 阿里云函数计算 https://www.aliyun.com/product/fc
 
 # 学习交流
 
