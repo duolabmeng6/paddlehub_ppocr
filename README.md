@@ -403,6 +403,10 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 
 在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中，可提供稳定可靠弹性的推理服务。
 
+在构建镜像方面，[飞浆官方提供的 docker 镜像](https://hub.docker.com/r/paddlepaddle/paddle/tags?page=1&ordering=last_updated)，动辄 4GB、8GB，在镜像如此大的情况下基本无缘 Serverless 。
+
+本文所构建的的镜像仅 564MB ，在 Serverless 架构下部署 ，启动速度理想。
+
 # 鸣谢
 
 感谢各厂商大佬提供的技术支持
