@@ -39,7 +39,7 @@ curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0K
 {"msg":"","results":[[{"confidence":0.9853195548057556,"text":"测试图像路径，可以是单张图片路径，也可以是图像集合目录路径","text_region":[[5,10],[466,10],[466,24],[5,24]]}]],"status":"000"}
 ```
 
-## 调用OCR代码示例
+## 调用 OCR 代码示例
 
 (查看调用代码示例) [https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo]
 
@@ -94,7 +94,7 @@ PaddleOCR
 3. 将 PaddleOCR 项目下载回来，编写 Dockerfile 文件
 4. 在 Serverless 架构的中部署
 
-# docker中构建飞浆的运行环境
+# docker 中构建飞浆的运行环境
 
 ## 1.构建 python3.7 运行环境
 
@@ -150,7 +150,7 @@ hub install deploy/hubserving/ocr_rec/
 hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000
 ```
 
-测试没问题 到这里运行镜像就构建好了
+测试没问题，到这里运行镜像就构建好了
 
 将容器内无用文件删除减小容器的体积
 
@@ -158,6 +158,37 @@ hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000
 rm -rf /root/.cache/* \
 && rm -rf /var/lib/apt/lists/* \
 && rm -rf /app/test/pg/*
+```
+
+## 编写 Dockerfile
+
+```
+# Version: 2.0.0
+FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
+
+
+COPY PaddleOCR /PaddleOCR
+
+WORKDIR /PaddleOCR
+
+RUN mkdir -p /PaddleOCR/inference/
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_det_infer.tar -C /PaddleOCR/inference/
+
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_cls_infer.tar -C /PaddleOCR/inference/
+
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_rec_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_rec_infer.tar -C /PaddleOCR/inference/
+
+RUN hub install deploy/hubserving/ocr_system/
+RUN hub install deploy/hubserving/ocr_cls/
+RUN hub install deploy/hubserving/ocr_det/
+RUN hub install deploy/hubserving/ocr_rec/
+
+EXPOSE 9000
+
+CMD ["/bin/bash","-c","hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000"]
 ```
 
 # 在 Serverless 架构的中部署
