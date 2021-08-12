@@ -30,7 +30,7 @@ curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0K
 
 ## 调用OCR代码示例
 
-https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo
+(查看调用代码示例) [https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo]
 
 ![1](README.assets/1.png)
 
@@ -188,7 +188,7 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 # 总结
 
-在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中。
+在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中，可提供稳定可靠弹性的推理服务。
 
 # 学习交流
 
