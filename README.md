@@ -10,12 +10,23 @@ PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
 
 # 开箱即用
 
-这里提供了可开箱即用的docker镜像 可直接用于部署到本地或函数计算中
+这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器或函数计算中
+
+(PaddleOCR docker 镜像地址)[https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr]
 
 ## 部署 PaddleOCR 到本地
 
-```
+如果国外访问太慢可使用国内的仓库地址
+
+```shell
+# docker hub 仓库的地址 (国外地址较慢)
 docker run -itd --name ppocr -p 9000:9000 duolabmeng666/paddlehub_ppocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
+
+# 腾讯云的镜像仓库地址
+docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
+
+# 阿里云的镜像仓库地址
+docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
 ```
 
 ## 调用 OCR
@@ -34,11 +45,11 @@ curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0K
 
 ![1](README.assets/1.png)
 
-
 ```python
 import requests
 from pyefun import *
 from pyefun.encoding.ebase64 import *
+
 
 # 用 docker 部署 PaddleOCR 开箱即用 通用文字识别
 # https://github.com/duolabmeng6/paddlehub_ppocr
@@ -49,6 +60,7 @@ def ocr(文件地址):
     txt = requests.post("http://127.0.0.1:9000/predict/ocr_system", data=data,
                         headers={'Content-Type': 'application/json'})
     return txt.content.decode("utf-8")
+
 
 print(ocr("./test.png"))
 
@@ -70,10 +82,10 @@ print(ocr("./test.png"))
 * 避免使用其他用户的存在限制访问或执行的文件。
 * 容器内文件可写层存储空间限制为512M。
 
-
 # 项目开发
 
-使用 [PaddleHub Serving 的服务部署](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.2/deploy/hubserving/readme.md) PaddleOCR
+使用 [PaddleHub Serving 的服务部署](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.2/deploy/hubserving/readme.md)
+PaddleOCR
 
 步骤如下：
 
@@ -87,6 +99,7 @@ print(ocr("./test.png"))
 ## 1.构建 python3.7 运行环境
 
 新建以下文件和目录
+
 ```
 /test_ppocr
 -- PaddleOCR (https://github.com/PaddlePaddle/PaddleOCR 项目的文件)
@@ -100,6 +113,7 @@ docker run -itd --name testppocr -p 9000:9000 -v /test_ppocr:/test_ppocr python:
 # 进入容器内安装飞浆的运行环境
 docker exec -it testppocr /bin/bash 
 ```
+
 ## 2. 安装依赖
 
 ```shell
@@ -130,7 +144,7 @@ hub install deploy/hubserving/ocr_det/
 hub install deploy/hubserving/ocr_rec/
 ```
 
-到这里 PaddleHub Serving 运行环境就安装好了 运行起来看一下效果 
+到这里 PaddleHub Serving 运行环境就安装好了 运行起来看一下效果
 
 ```shell
 hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000
@@ -145,7 +159,6 @@ rm -rf /root/.cache/* \
 && rm -rf /var/lib/apt/lists/* \
 && rm -rf /app/test/pg/*
 ```
-
 
 # 在 Serverless 架构的中部署
 
@@ -174,7 +187,6 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ![2](./demo/2.png)
 
 ![3](./demo/3.png)
-
 
 ## 腾讯云函数无法部署
 
