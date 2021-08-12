@@ -86,13 +86,19 @@ print(ocr("./test.png"))
 
 ## 腾讯云函数无法部署
 
-原因 腾讯云云函数容器镜像部署无法写文件导致容器无法正常启动.
+1. 需要将镜像推送至腾讯云的镜像仓库
+2. 创建云函数
 
-容器内文件读写权限
+```shell
+docker pull duolabmeng666/paddlehub_ppocr:1.2
+docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/pphubocr
+docker push ccr.ccs.tencentyun.com/llapixxx/pphubocr
+```
+推送镜像至腾讯云的成功以后就可以创建云函数了
+识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
 
-* 默认/tmp可读可写，建议输出文件时选择/tmp。
-* 避免使用其他用户的存在限制访问或执行的文件。
-* 容器内文件可写层存储空间限制为512M。
+![4](./demo/4.png)
+![5](./demo/5.png)
 
 # 项目开发
 
@@ -217,6 +223,7 @@ docker tag paddlehub_ppocr:1.0 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ```
 
+
 ## 部署到阿里云函数计算
 
 容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
@@ -231,15 +238,128 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 ![3](./demo/3.png)
 
-## 腾讯云函数无法部署
+## 部署到腾讯云函数计算
 
-原因 腾讯云云函数容器镜像部署无法写文件导致容器无法正常启动.
+由于腾讯云云函数容器的文件的限制只允许 `/tmp` 可读可写，所以我们需要修改代码以支持云函数的部署。
 
-容器内文件读写权限
+这里我已经构建好了可以直接使用。
 
-* 默认/tmp可读可写，建议输出文件时选择/tmp。
-* 避免使用其他用户的存在限制访问或执行的文件。
-* 容器内文件可写层存储空间限制为512M。
+1. 需要将镜像推送至腾讯云的镜像仓库
+2. 创建云函数
+
+```shell
+docker pull duolabmeng666/paddlehub_ppocr:1.2
+docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/pphubocr
+docker push ccr.ccs.tencentyun.com/llapixxx/pphubocr
+```
+推送镜像至腾讯云的成功以后就可以创建云函数了
+识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
+
+![4](./demo/4.png)
+![5](./demo/5.png)
+
+### 解决方案
+
+* 了解 docker 镜像制作与推送
+* 云函数中报错解决思路
+
+### 分析 docker 文件中写出的文件
+
+将我们前面部署好的镜像，在自己电脑上运行起来
+
+```shell
+docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0
+```
+
+查看文件差异信息 发现运行了以后在非 /tmp 目录进行了写文件操作 所以导致在云函数中无法启动容器。
+现在我们要做的事情就是将路径处理到 /tmp 中
+
+```shell
+docker diff ppocr
+C /root
+C /root/.paddlehub
+C /root/.paddlehub/conf
+A /root/.paddlehub/conf/serving_9000.json
+C /root/.paddlehub/log
+A /root/.paddlehub/log/HubServing-2021_08_12.log
+```
+
+通过查看源代码可以发现 `/paddlehub/env.py` 是控制这些文件写出目录的文件
+
+将文件复制出来放置 `./tx/env.py` 并在最后增加以下代码
+
+```shell
+CONF_HOME = "/tmp"
+LOG_HOME = "/tmp"
+TMP_HOME = "/tmp"
+```
+
+### 编写 Dockerfile
+
+在项目目录中创建文件 `Dockerfile_TX`
+```shell
+FROM ccr.ccs.tencentyun.com/llapi/pphubocr:1.0
+
+WORKDIR /PaddleOCR
+
+COPY ./tx/env.py /usr/local/lib/python3.7/site-packages/paddlehub/env.py
+
+CMD ["/bin/bash","-c","hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000"]
+```
+
+### 构建镜像测试
+
+```shell
+docker build -f ./Dockerfile_TX -t paddlehub_ppocr:1.0 .
+docker rm -f ppocr
+docker run -itd --name ppocr -p 9003:9000 paddlehub_ppocr:1.0
+docker logs ppocr
+docker diff ppocr
+```
+
+可以发现镜像在镜像中依然存在非 /tmp 文件的读写 但是这些文件在保存容器镜像以后 不会在读写 所以接下来只需要保存镜像推送即可
+
+```shell
+docker diff ppocr
+C /usr
+C /usr/local
+C /usr/local/lib
+C /usr/local/lib/python3.7
+C /usr/local/lib/python3.7/site-packages
+C /usr/local/lib/python3.7/site-packages/paddlehub
+C /usr/local/lib/python3.7/site-packages/paddlehub/__pycache__
+C /usr/local/lib/python3.7/site-packages/paddlehub/__pycache__/env.cpython-37.pyc
+C /tmp
+A /tmp/HubServing-2021_08_12.log
+A /tmp/cache.yaml
+A /tmp/config.yaml
+A /tmp/serving_9000.json
+```
+
+### 打包镜像推送
+
+```shell
+# 保存镜像
+docker commit ppocr ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
+
+# 测试一下这个镜像是否还存文件读写的情况 没有问题的话就可以推送了
+docker rm -f ppocr
+docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
+docker logs ppocr
+docker diff ppocr
+
+# 经过前面的检查确定镜像没有问题，推送镜像
+docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
+```
+
+### 在腾讯云函数中创建
+
+选择镜像直接部署就可以拿到识别地址了
+
+![4](./demo/4.png)
+![5](./demo/5.png)
+
+
 
 # 总结
 
