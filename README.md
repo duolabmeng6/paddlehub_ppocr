@@ -13,7 +13,7 @@ PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
 
 # 开箱即用
 
-这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器或函数计算中
+这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器，阿里云函数计算，腾讯云函数中提供通用文字识别 api 接口
 
 [PaddleOCR docker 镜像地址](https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr)
 
@@ -297,6 +297,7 @@ TMP_HOME = "/tmp"
 ### 编写 Dockerfile
 
 在项目目录中创建文件 `Dockerfile_TX`
+
 ```shell
 FROM ccr.ccs.tencentyun.com/llapi/pphubocr:1.0
 
