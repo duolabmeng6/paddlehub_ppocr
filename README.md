@@ -43,7 +43,7 @@ curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0K
 
 (查看调用代码示例) [https://github.com/duolabmeng6/paddlehub_ppocr/tree/master/demo]
 
-![1](README.assets/1.png)
+![1](./demo/1.png)
 
 ```python
 import requests
