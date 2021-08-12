@@ -2,6 +2,9 @@
 
 # 基于 Serverless 架构部署通用文字识别 PaddleOCR
 
+[![github stars](https://img.shields.io/github/stars/duolabmeng6/paddlehub_ppocr?style=social)](https://github.com/duolabmeng6/paddlehub_ppocr)
+[![gitee stars](https://gitee.com/duolabmeng666/paddlehub_ppocr/badge/star.svg?theme=dark)](https://gitee.com/duolabmeng666/paddlehub_ppocr/stargazers)
+
 # 项目背景
 
 PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力使用者训练出更好的模型，并应用落地。
