@@ -9,6 +9,15 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 
 PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
 
+在日常项目应用中，相信大家都希望自己项目中的Restful API服务，能够稳健的运行，并且最好拥有高并发，高可用的特性。云厂商提供的 Serverless 服务是最佳的选择。无需运维人员，无需自建 k8s，不需要担心服务崩溃不可用。
+
+我们把 PaddleOCR 服务打包成一个镜像，以便在 Docker 或 k8s 环境里，快速发布上线使用。
+
+本文将提供标准化的代码来实现这样的目标。
+
+大家可以通过本项目提供的镜像，把 PaddleOCR 项目快速发布成可调用的Restful API服务。
+
+
 # 开箱即用
 
 这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器，阿里云函数计算，腾讯云函数中提供通用文字识别 api 接口
@@ -32,9 +41,14 @@ docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llap
 
 ## 调用 OCR
 
+1. 计算待识别图片的Base64编码
+2. 发送服务请求（发送参数，参考下面命令）
+
 ```
 curl -H "Content-Type:application/json" -X POST --data "{\"images\": [\"iVBORw0KGgoAAAANSUhEUgAAAHkAAAAnCAYAAAArfufOAAAEvElEQVR4nO1bMWsbSRT+clyv4sAWGAS5wpUN8UGuSmlQEBHpsp0LgZy4cOkuwhHqrDKFkERcpMqWQZcgkRQurrJBNifjwo3BYEcSpNAv2Huzu5JWu7Pe2dWubDLzNV7P7r5987733rx5Yz8yCFD4pfHbfSugkDwUyRJAkSwBFMkSQJEsARTJEkCRLAEUyRJAkSwBFMkSQJEsAbwkn+nQdqo4PBN4W+jZATrlKrTydww5d4dfGyRDx7mgwg8Vsc+D2bbZE/tuwHO/x6WTL/o9/NsHVvPrWIoqg024fj2XGtnXeyg8mf7OjLPbGoWWs5rfQiW3LPSs8DfSG3i/vzljn/MTmm/3mhznAqWahjXee2QXS/4FOdc6/xmMSe5/R6l8ikvHjU69io7QVJzPplDY30Y27VC2xeRmUGKGsclyGzwQTzToNb+bLFN8xCG8hgpGxt+AHvRwuNPGVSj5wd84b1ZRufWOrxX3oNv2quw0PHY19WGOz3EQNyyS05uo1DatkTBEBD1LzqN3WRSJGtImrM+uvQ4jHZhzvyYbfwZWZm4wO7UpsMiBBBw7wXRNitQpisnTdn2dpYd/zHQzIm+twiJ2D++7LM0lp9kU1/Z3xbHquPam49FUHs279DS8Rn4pvlLm6cnR/6/n0IvrM0O+JIdJ11ycHVkRyYnEqewMCvkU0ErNpDSrQEthJfEoni9dL+W2oeesazPtdmflMcLCwinTg4jLnS/JYdK1B2yNd4671nyn7CiGeHjo4bjrd08gWyTszAmkaztNU9oooW0VFeM1P4YqOV7Ml64nOLuYZL1jiujjp84AiVZ4xYn40zXbMrFKl9aFYbMdXbOFIJ7qmm13VtMpXPavcXVLP+sNrFDRuBGvspERf7pmUbtvXfKaH8EY4PSECo/0n9H31YuEuYPI4Fl+hMtWBtq+BrDoLOtUb4QR5NxZ3I3AAHRtq5JvhojCs26H3fNGwfzpmvUBkN+iqP08GVsrbqHQPAJuwkheRpZ2Flnf+1MnCNOQYXg4JDv36gvDnOmaMplZURfJ4F+dN4iwomYVld2YCi97t5LNb+CqdYTznKjeNsm8vVm0jhe4+7RIsCP7cdju2AIxvB1Rxtk2je2/NMVReE27Wy9ymxje0DvNnrCdTZLv3JvdF/o/zdT9OFaZ7vbtKHS6RusjNLNRY3XkConv5b3drSW2HFDq1poQIvrOdG15mbs3OkevOP0HrWmzhZqfg7EoYVHwd5xRfC9LwjwYr8PMoZzZgK3fz3FDy4cI0dzzZOvYjAgGpV4OkRuUQvWXP7FLz2g7DXQEKkIT6WUzMjsnQUdodruTnGIRFTZzZt6R6Xjc75g0UZjHuHYw1Xg9/HUUahTRt+1ADh5N/xfKUcKHWVcnKZBzAsXLBKINEXsbgIhHgjxMq1KriOq4xof9AZbSnKrVpTNve2nVNSlPWzP0UaPjW8Lty8k7Poc6jOTBl7rx6s2B8eHUiI4f34y3JOPtl/5kqNc4MF69+2YM5hAbL/pG+92BOVennqFgz9M9L8uGn4xewJgbUxv9Z3xgct/UjfaPaKqNeXR/0xHJCr8q1N94SQBFsgRQJEsARbIEUCRLAEWyBFAkSwBFsgT4HxQ8/CE4B3ErAAAAAElFTkSuQmCC\"]}" http://127.0.0.1:9000/predict/ocr_system
 ```
+
+3. 返回结果（如果调用成功，会返回如下结果）
 
 ```
 {"msg":"","results":[[{"confidence":0.9853195548057556,"text":"测试图像路径，可以是单张图片路径，也可以是图像集合目录路径","text_region":[[5,10],[466,10],[466,24],[5,24]]}]],"status":"000"}
@@ -70,6 +84,8 @@ print(ocr("./test.png"))
 
 ## 部署到阿里云函数计算
 
+在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
+
 容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
 
 启动命令 `["sh","/PaddleOCR/start.sh"]`
@@ -83,6 +99,8 @@ print(ocr("./test.png"))
 ![3](./demo/3.png)
 
 ## 部署到腾讯云函数
+
+在腾讯云函数控制台中，需要将镜像推送至自己账户中的镜像仓库，随后创建云函数，即可提供 api 识别接口。
 
 1. 需要将镜像推送至腾讯云的镜像仓库
 2. 创建云函数
@@ -107,7 +125,7 @@ PaddleOCR
 步骤如下：
 
 1. 构建飞浆的运行环境
-2. 用 PaddleHub Serving 的服务部署 .
+2. 用 PaddleHub Serving 的服务部署
 3. 将 PaddleOCR 项目下载回来，编写 Dockerfile 文件
 4. 在 Serverless 架构的中部署
 
@@ -167,14 +185,28 @@ hub install deploy/hubserving/ocr_rec/
 hub serving start --modules ocr_system ocr_cls ocr_det ocr_rec -p 9000
 ```
 
+识别地址就是 http://127.0.0.1:9000/predict/ocr_system
+
 测试没问题，到这里运行镜像就构建好了
 
-将容器内无用文件删除减小容器的体积
+最后将容器内无用文件删除，减小容器的体积
 
 ```shell
 rm -rf /root/.cache/* \
 && rm -rf /var/lib/apt/lists/* \
 && rm -rf /app/test/pg/*
+```
+
+保存并推送到对应厂商的容器镜像仓库
+
+这里以阿里云容器镜像仓库作为例子
+
+请自行修改参数推送，这里是我的账户命令
+
+```shell
+docker commit testppocr paddlehub_ppocr:1.0
+docker tag paddlehub_ppocr:1.0 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
+docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ```
 
 ## 编写 Dockerfile
@@ -237,11 +269,30 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 ![3](./demo/3.png)
 
+## 部署到阿里云函数计算
+
+在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
+
+容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
+
+启动命令 `["sh","/PaddleOCR/start.sh"]`
+
+需要绑定域名
+
+识别地址就是 http://绑定域名/predict/ocr_system
+
+![2](./demo/2.png)
+
+![3](./demo/3.png)
+
+
 ## 部署到腾讯云函数计算
 
 由于腾讯云云函数容器的文件的限制只允许 `/tmp` 可读可写，所以我们需要修改代码以支持云函数的部署。
 
 这里我已经构建好了可以直接使用。
+
+在腾讯云函数控制台中，需要将镜像推送至自己账户中的镜像仓库，随后创建云函数，即可提供 api 识别接口。
 
 1. 需要将镜像推送至腾讯云的镜像仓库
 2. 创建云函数
@@ -252,7 +303,8 @@ docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppo
 docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
 ```
 
-推送镜像至腾讯云的成功以后就可以创建云函数了
+推送镜像至腾讯云以后就可以创建云函数了
+
 识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
 
 ![4](./demo/4.png)
