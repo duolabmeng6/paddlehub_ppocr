@@ -91,8 +91,8 @@ print(ocr("./test.png"))
 
 ```shell
 docker pull duolabmeng666/paddlehub_ppocr:1.2
-docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/pphubocr
-docker push ccr.ccs.tencentyun.com/llapixxx/pphubocr
+docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
+docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
 ```
 推送镜像至腾讯云的成功以后就可以创建云函数了
 识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
@@ -249,9 +249,10 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 ```shell
 docker pull duolabmeng666/paddlehub_ppocr:1.2
-docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/pphubocr
-docker push ccr.ccs.tencentyun.com/llapixxx/pphubocr
+docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
+docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
 ```
+
 推送镜像至腾讯云的成功以后就可以创建云函数了
 识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
 
