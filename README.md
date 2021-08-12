@@ -350,7 +350,7 @@ CMD ["/bin/bash","-c","hub serving start --modules ocr_system ocr_cls ocr_det oc
 ```shell
 docker build -f ./Dockerfile_TX -t paddlehub_ppocr:1.0 .
 docker rm -f ppocr
-docker run -itd --name ppocr -p 9003:9000 paddlehub_ppocr:1.0
+docker run -itd --name ppocr -p 9000:9000 paddlehub_ppocr:1.0
 docker logs ppocr
 docker diff ppocr
 ```
