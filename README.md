@@ -164,13 +164,17 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ## 部署到阿里云函数计算
 
 容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
+
 启动命令 `["sh","/PaddleOCR/start.sh"]`
+
 需要绑定域名
 
-![2](README.assets/2.png)
-![2](README.assets/3.png)
-
 识别地址就是 http://绑定域名/predict/ocr_system
+
+![2](./demo/2.png)
+
+![3](./demo/3.png)
+
 
 ## 腾讯云函数无法部署
 
