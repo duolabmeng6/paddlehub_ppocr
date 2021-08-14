@@ -1,0 +1,46 @@
+edition: 1.0.0
+name: ppocr
+access: default
+
+services:
+  ppocr:
+    component: fc
+    props:
+      region: cn-shenzhen
+      service:
+        name: ppocr
+        description: '基于 Serverless 架构部署通用文字识别 PaddleOCR'
+        internetAccess: true
+        role:
+          name: qianfeng-fc-deploy-role
+          policies:
+            - AliyunContainerRegistryReadOnlyAccess
+      function:
+        name: ppocr
+        description: '基于 Serverless 架构部署通用文字识别 PaddleOCR'
+        runtime: custom-container
+        memorySize: 2048
+        caPort: 9000
+        codeUri: ./
+        timeout: 60
+        customContainerConfig:
+          image: registry-vpc.cn-shenzhen.aliyuncs.com/duolabmeng/ppocr:1.2
+          command: '["sh","/PaddleOCR/start.sh"]'
+        environmentVariables:
+          testEnv: true
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            authType: anonymous
+            methods:
+              - GET
+              - POST
+              - PUT
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
+              serviceName: ppocr
+              functionName: ppocr
