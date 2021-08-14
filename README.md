@@ -429,6 +429,13 @@ s deploy
 * 腾讯云函数 https://cloud.tencent.com/product/scf
 * 阿里云函数计算 https://www.aliyun.com/product/fc
 
+
 # 图书推荐
 
 Serverless工程实践：从入门到进阶 https://item.jd.com/13366562.html
+
+# 本文作者
+
+多啦b梦 [Github](https://github.com/duolabmeng6) 
+
+转载本文请注明来源，谢谢。
