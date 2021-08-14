@@ -5,17 +5,16 @@
 
 # 项目背景
 
-PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力使用者训练出更好的模型，并应用落地。
-
-PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
-
 在日常项目应用中，相信大家都希望自己项目中的Restful API服务，能够稳健的运行，并且最好拥有高并发，高可用的特性。云厂商提供的 Serverless 服务是最佳的选择。无需运维人员，无需自建 k8s，不需要担心服务崩溃不可用。
 
-我们把 PaddleOCR 服务打包成一个镜像，以便在 Docker 或 k8s 环境里，快速发布上线使用。
+PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力使用者训练出更好的模型，并应用落地。PaddleOCR 项目地址: https://github.com/PaddlePaddle/PaddleOCR
+
+我们把 PaddleOCR 服务打包成一个镜像，以便在 Docker 或 k8s 环境里，快速发布到线上使用。
 
 本文将提供标准化的代码来实现这样的目标。
 
 大家可以通过本项目提供的镜像，把 PaddleOCR 项目快速发布成可调用的Restful API服务。
+
 
 
 # 开箱即用
@@ -65,9 +64,9 @@ import requests
 from pyefun import *
 from pyefun.encoding.ebase64 import *
 
-
-# 用 docker 部署 PaddleOCR 开箱即用 通用文字识别
+# 基于 Serverless 架构部署通用文字识别 PaddleOCR
 # https://github.com/duolabmeng6/paddlehub_ppocr
+# docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
 
 def ocr(文件地址):
     image = base64编码(读入文件(文件地址))
@@ -76,8 +75,8 @@ def ocr(文件地址):
                         headers={'Content-Type': 'application/json'})
     return txt.content.decode("utf-8")
 
-
 print(ocr("./test.png"))
+
 
 ```
 
