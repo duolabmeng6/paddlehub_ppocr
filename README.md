@@ -156,6 +156,8 @@ docker exec -it testppocr /bin/bash
 
 ## 2. 安装依赖
 
+> 确定系统需要什么依赖，是通过代码运行来确定的。`docker exec -it testppocr /bin/bash` 进入运行好的基础环境，进入容器内终端后，运行你的代码，确定所需要安装的依赖。 
+
 ```shell
 apt install g++
 apt install libglib2.0-dev
