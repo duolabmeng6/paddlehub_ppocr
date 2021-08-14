@@ -428,6 +428,7 @@ s deploy
 * PaddleOCR https://github.com/PaddlePaddle/PaddleOCR
 * 腾讯云函数 https://cloud.tencent.com/product/scf
 * 阿里云函数计算 https://www.aliyun.com/product/fc
+* Serverless Devs https://www.serverless-devs.com/
 
 
 # 图书推荐
