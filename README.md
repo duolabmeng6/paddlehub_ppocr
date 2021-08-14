@@ -403,7 +403,7 @@ s config add
 # 部署ppocr
 s deploy
 ```
-![5](./demo/6.png)
+![5](./demo/7.png)
 
 执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
 
