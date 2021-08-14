@@ -274,26 +274,6 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 由于腾讯云云函数容器的文件的限制只允许 `/tmp` 可读可写，所以我们需要修改代码以支持云函数的部署。
 
-这里我已经构建好了可以直接使用。
-
-在腾讯云函数控制台中，需要将镜像推送至自己账户中的镜像仓库，随后创建云函数，即可提供 api 识别接口。
-
-1. 需要将镜像推送至腾讯云的镜像仓库
-2. 创建云函数
-
-```shell
-docker pull duolabmeng666/paddlehub_ppocr:1.2
-docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
-docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
-```
-
-推送镜像至腾讯云以后就可以创建云函数了
-
-识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
-
-![4](./demo/4.png)
-![5](./demo/5.png)
-
 ### 解决方案
 
 * 了解 docker 镜像制作与推送
