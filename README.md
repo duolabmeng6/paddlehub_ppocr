@@ -376,9 +376,9 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 ![4](./demo/4.png)
 ![5](./demo/5.png)
 
-## 使用 Serverless Devs 部署
+## 使用 Serverless Devs 部署到阿里云函数计算
 
-Serverless Devs是一个开源开放的Serverless开发者平台，您无需关心底层资源。通过Serverless Devs，您不仅可以可插拔式地使用Serverless的服务和框架，也可以参与组件和插件的开发，提高运维效率。同时，您也可以更简单、快速地开发、创建、测试和部署项目，实现项目全生命周期的管理。
+Serverless Devs是一个开源开放的Serverless开发者平台，您无需关心底层资源。通过Serverless Devs，您不仅可以可插拔式地使用Serverless的服务和框架，也可以参与组件和插件的开发，提高运维效率。同时，您也可以更简单、快速地开发、创建、测试和部署项目，实现项目全生命周期的管理。[Github](https://github.com/Serverless-Devs/Serverless-Devs/blob/master/readme_zh.md) [文档地址](https://www.serverless-devs.com/docs/intro)
 
 [安装 Serverless Devs](https://help.aliyun.com/document_detail/195474.htm)
 
