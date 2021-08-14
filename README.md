@@ -435,6 +435,8 @@ s deploy
 
 Serverless工程实践：从入门到进阶 https://item.jd.com/13366562.html
 
+![5](./demo/6.png)
+
 # 本文作者
 
 多啦b梦 [Github](https://github.com/duolabmeng6) 
