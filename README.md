@@ -152,7 +152,7 @@ docker run -itd --name testppocr -p 9000:9000 -v /test_ppocr:/test_ppocr python:
 docker exec -it testppocr /bin/bash 
 ```
 
-> 在部署深度学习模型时， docker 中 python 环境不建议使用 alpine 版本 例如 `python:3.7-alpine` 原因使用alpine版本，需要花费大量时间来安装系统依赖，收益不大，最终镜像的大小，与 slim 版本的基本相同。如果环境难以安装也可以选择 `python:3.7-buster` 镜像，最终制作完成通常比 slim 大100MB-300MB，但安装难度会极大地降低，也是可以接受的。推荐新手使用 buster 版本制作镜像。
+> 在部署深度学习模型时， docker 中 python 环境不建议使用 alpine 版本 例如 `python:3.7-alpine` 原因使用 alpine 版本，需要花费大量时间来安装系统依赖，收益不大，最终镜像的大小，与 slim 版本的基本相同。如果环境难以安装也可以选择 `python:3.7-buster` 镜像，最终制作完成通常比 slim 大100MB-300MB，但安装难度会极大地降低，也是可以接受的。推荐新手使用 buster 版本制作镜像。如需体积较小的镜像时再用 slim 版本制作。在 Serverless 环境中需要体积较小的镜像来提高函数的启动速度，所以选择 slim 版本制作镜像。
 
 ## 2. 安装依赖
 
