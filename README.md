@@ -416,12 +416,6 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 * 腾讯云函数 https://cloud.tencent.com/product/scf
 * 阿里云函数计算 https://www.aliyun.com/product/fc
 
-# 学习交流
+# 图书推荐
 
-pyefun 易函数 qq群:1017240979
-
-# 项目相关
-
-pyefun 易函数 https://github.com/duolabmeng6/pyefun
-
-为python提供强大且易用的中文函数库，完整的封装了易语言核心支持库所有功能，以及易语言中简单易用的函数
+Serverless工程实践：从入门到进阶 https://item.jd.com/13366562.html
