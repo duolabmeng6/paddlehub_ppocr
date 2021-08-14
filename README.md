@@ -19,7 +19,7 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 
 * 在 Serverless 架构中 docker 镜像制作的最佳实践，游刃有余的部署复杂场景下的深度学习模型
 * 熟练的使用各厂商提供的 Serverless 服务，部署。
-
+* 制作小巧精良的 docker 镜像
 
 # 开箱即用
 
@@ -151,6 +151,8 @@ docker run -itd --name testppocr -p 9000:9000 -v /test_ppocr:/test_ppocr python:
 # 进入容器内安装飞浆的运行环境
 docker exec -it testppocr /bin/bash 
 ```
+
+> 在部署深度学习模型时， docker 中 python 环境不建议使用 alpine 版本 例如 `python:3.7-alpine` 原因使用alpine版本，需要花费大量时间来安装系统依赖，收益不大，最终镜像的大小，与 slim 版本的基本相同。如果环境难以安装也可以选择 `python:3.7-buster` 镜像，最终制作完成通常比 slim 大100MB-300MB，但安装难度会极大地降低，也是可以接受的。推荐新手使用 buster 版本制作镜像。
 
 ## 2. 安装依赖
 
