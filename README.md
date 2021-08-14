@@ -396,7 +396,36 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 ![4](./demo/4.png)
 ![5](./demo/5.png)
 
+## 使用 Serverless Devs 部署
 
+Serverless Devs是一个开源开放的Serverless开发者平台，您无需关心底层资源。通过Serverless Devs，您不仅可以可插拔式地使用Serverless的服务和框架，也可以参与组件和插件的开发，提高运维效率。同时，您也可以更简单、快速地开发、创建、测试和部署项目，实现项目全生命周期的管理。
+
+[安装 Serverless Devs](https://help.aliyun.com/document_detail/195474.htm)
+
+```
+npm install @serverless-devs/s -g
+```
+
+[配置Serverless Devs](https://help.aliyun.com/document_detail/295894.html)
+
+在使用Serverless Devs前，您需要配置Serverless Devs，以阿里云密钥为例。[教程地址](https://help.aliyun.com/document_detail/295894.html)
+
+
+进入本项目目录 `deploy\aliyun_fc`
+
+```
+# 进入目录
+cd deploy\aliyun_fc
+
+# 输入命令后一步一步添加阿里云秘钥
+s config add
+
+# 部署ppocr
+s deploy
+```
+![5](./demo/6.png)
+
+执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
 
 # 总结
 
