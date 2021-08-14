@@ -287,8 +287,8 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0
 ```
 
-查看文件差异信息 发现运行了以后在非 /tmp 目录进行了写文件操作 所以导致在云函数中无法启动容器。
-现在我们要做的事情就是将路径处理到 /tmp 中
+查看文件差异信息，发现运行以后，在非 `/tmp` 目录进行了写文件操作，所以导致在云函数中无法启动容器。
+现在我们要做的事情就是将路径处理到 `/tmp` 目录中
 
 ```shell
 docker diff ppocr
