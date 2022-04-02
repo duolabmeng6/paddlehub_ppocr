@@ -166,13 +166,13 @@ apt install libsm6
 apt install libxrender1
 
 # 离线下载 python 安装包 由于构建时经常重试所以下载离线包调试速度会加快
-pip download -r requirements.txt -d ./pg
-pip download paddlepaddle==2.0.2 -i https://mirror.baidu.com/pypi/simple -d ./pg
-pip download paddlehub -d ./pg
+pip download -r requirements.txt -i https://mirror.baidu.com/pypi/simple -d ./pg
+pip download paddlepaddle==2.2.2 -i https://mirror.baidu.com/pypi/simple -d ./pg
+pip download paddlehub -i https://mirror.baidu.com/pypi/simple -d ./pg
 
 # 安装 python 包
-pip install -r requirements.txt --find-links ./pg
-pip install paddlepaddle --find-links ./pg
+pip install -r requirements.txt --no-index --find-links ./pg
+pip install paddlepaddle --no-index --find-links ./pg
 pip install paddlehub -U --no-index --find-links ./pg
 
 ```

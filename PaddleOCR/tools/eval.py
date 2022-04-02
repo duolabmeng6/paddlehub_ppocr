@@ -27,7 +27,7 @@ from ppocr.data import build_dataloader
 from ppocr.modeling.architectures import build_model
 from ppocr.postprocess import build_post_process
 from ppocr.metrics import build_metric
-from ppocr.utils.save_load import init_model
+from ppocr.utils.save_load import load_model
 from ppocr.utils.utility import print_dict
 import tools.program as program
 
@@ -44,12 +44,24 @@ def main():
     # build model
     # for rec algorithm
     if hasattr(post_process_class, 'character'):
-        config['Architecture']["Head"]['out_channels'] = len(
-            getattr(post_process_class, 'character'))
-    model = build_model(config['Architecture'])
-    use_srn = config['Architecture']['algorithm'] == "SRN"
+        char_num = len(getattr(post_process_class, 'character'))
+        if config['Architecture']["algorithm"] in ["Distillation",
+                                                   ]:  # distillation model
+            for key in config['Architecture']["Models"]:
+                config['Architecture']["Models"][key]["Head"][
+                    'out_channels'] = char_num
+        else:  # base rec model
+            config['Architecture']["Head"]['out_channels'] = char_num
 
-    best_model_dict = init_model(config, model, logger)
+    model = build_model(config['Architecture'])
+    extra_input = config['Architecture'][
+        'algorithm'] in ["SRN", "NRTR", "SAR", "SEED"]
+    if "model_type" in config['Architecture'].keys():
+        model_type = config['Architecture']['model_type']
+    else:
+        model_type = None
+
+    best_model_dict = load_model(config, model)
     if len(best_model_dict):
         logger.info('metric in ckpt ***************')
         for k, v in best_model_dict.items():
@@ -57,10 +69,9 @@ def main():
 
     # build metric
     eval_class = build_metric(config['Metric'])
-
     # start eval
     metric = program.eval(model, valid_dataloader, post_process_class,
-                          eval_class, use_srn)
+                          eval_class, model_type, extra_input)
     logger.info('metric eval ***************')
     for k, v in metric.items():
         logger.info('{}:{}'.format(k, v))

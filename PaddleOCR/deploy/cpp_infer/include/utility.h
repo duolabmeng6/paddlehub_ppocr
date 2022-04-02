@@ -44,6 +44,15 @@ public:
   inline static size_t argmax(ForwardIterator first, ForwardIterator last) {
     return std::distance(first, std::max_element(first, last));
   }
+
+  static void GetAllFiles(const char *dir_name,
+                          std::vector<std::string> &all_inputs);
+    
+  static cv::Mat GetRotateCropImage(const cv::Mat &srcimage,
+                          std::vector<std::vector<int>> box);
+    
+  static std::vector<int> argsort(const std::vector<float>& array);
+
 };
 
 } // namespace PaddleOCR
