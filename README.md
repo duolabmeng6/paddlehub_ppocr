@@ -40,6 +40,9 @@ docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:
 
 # 阿里云的镜像仓库地址
 docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
+
+# 阿里云的镜像仓库地址 服务器端模型
+docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.6.server /bin/bash -c "sh /PaddleOCR/start.sh"
 ```
 
 ## 调用 OCR
