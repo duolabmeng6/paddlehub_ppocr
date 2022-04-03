@@ -89,7 +89,11 @@ print(ocr("./test.png"))
 
 在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
 
-容器镜像地址 `registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
+函数计算地区选择香港
+
+容器镜像地址 `registry-vpc.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
+
+这是server版本的容器镜像 `registry-vpc.cn-hongkong.aliyuncs.com/llapi/ppocr:1.6.server`
 
 启动命令 `["sh","/PaddleOCR/start.sh"]`
 
