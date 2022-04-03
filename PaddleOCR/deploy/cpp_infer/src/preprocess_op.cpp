@@ -40,17 +40,6 @@ void Permute::Run(const cv::Mat *im, float *data) {
   }
 }
 
-void PermuteBatch::Run(const std::vector<cv::Mat> imgs, float *data) {
-    for (int j = 0; j < imgs.size(); j ++){
-        int rh = imgs[j].rows;
-        int rw = imgs[j].cols;
-        int rc = imgs[j].channels();
-        for (int i = 0; i < rc; ++i) {
-            cv::extractChannel(imgs[j], cv::Mat(rh, rw, CV_32FC1, data + (j * rc + i) * rh * rw), i);
-        }
-    }
-}
-    
 void Normalize::Run(cv::Mat *im, const std::vector<float> &mean,
                     const std::vector<float> &scale, const bool is_scale) {
   double e = 1.0;
@@ -58,13 +47,16 @@ void Normalize::Run(cv::Mat *im, const std::vector<float> &mean,
     e /= 255.0;
   }
   (*im).convertTo(*im, CV_32FC3, e);
-  std::vector<cv::Mat> bgr_channels(3);
-  cv::split(*im, bgr_channels);
-  for (auto i = 0; i < bgr_channels.size(); i++) {
-    bgr_channels[i].convertTo(bgr_channels[i], CV_32FC1, 1.0 * scale[i],
-                              (0.0 - mean[i]) * scale[i]);
+  for (int h = 0; h < im->rows; h++) {
+    for (int w = 0; w < im->cols; w++) {
+      im->at<cv::Vec3f>(h, w)[0] =
+          (im->at<cv::Vec3f>(h, w)[0] - mean[0]) * scale[0];
+      im->at<cv::Vec3f>(h, w)[1] =
+          (im->at<cv::Vec3f>(h, w)[1] - mean[1]) * scale[1];
+      im->at<cv::Vec3f>(h, w)[2] =
+          (im->at<cv::Vec3f>(h, w)[2] - mean[2]) * scale[2];
+    }
   }
-  cv::merge(bgr_channels, *im);
 }
 
 void ResizeImgType0::Run(const cv::Mat &img, cv::Mat &resize_img,
@@ -89,9 +81,15 @@ void ResizeImgType0::Run(const cv::Mat &img, cv::Mat &resize_img,
   resize_h = max(int(round(float(resize_h) / 32) * 32), 32);
   resize_w = max(int(round(float(resize_w) / 32) * 32), 32);
 
-  cv::resize(img, resize_img, cv::Size(resize_w, resize_h));
-  ratio_h = float(resize_h) / float(h);
-  ratio_w = float(resize_w) / float(w);
+  if (!use_tensorrt) {
+    cv::resize(img, resize_img, cv::Size(resize_w, resize_h));
+    ratio_h = float(resize_h) / float(h);
+    ratio_w = float(resize_w) / float(w);
+  } else {
+    cv::resize(img, resize_img, cv::Size(640, 640));
+    ratio_h = float(640) / float(h);
+    ratio_w = float(640) / float(w);
+  }
 }
 
 void CrnnResizeImg::Run(const cv::Mat &img, cv::Mat &resize_img, float wh_ratio,
@@ -101,22 +99,32 @@ void CrnnResizeImg::Run(const cv::Mat &img, cv::Mat &resize_img, float wh_ratio,
   imgC = rec_image_shape[0];
   imgH = rec_image_shape[1];
   imgW = rec_image_shape[2];
-    
+
   imgW = int(32 * wh_ratio);
 
   float ratio = float(img.cols) / float(img.rows);
   int resize_w, resize_h;
-
   if (ceilf(imgH * ratio) > imgW)
     resize_w = imgW;
   else
     resize_w = int(ceilf(imgH * ratio));
-    
-  cv::resize(img, resize_img, cv::Size(resize_w, imgH), 0.f, 0.f,
-             cv::INTER_LINEAR);
-  cv::copyMakeBorder(resize_img, resize_img, 0, 0, 0,
-                     int(imgW - resize_img.cols), cv::BORDER_CONSTANT,
-                     {127, 127, 127});
+  if (!use_tensorrt) {
+    cv::resize(img, resize_img, cv::Size(resize_w, imgH), 0.f, 0.f,
+               cv::INTER_LINEAR);
+    cv::copyMakeBorder(resize_img, resize_img, 0, 0, 0,
+                       int(imgW - resize_img.cols), cv::BORDER_CONSTANT,
+                       {127, 127, 127});
+  } else {
+    int k = int(img.cols * 32 / img.rows);
+    if (k >= 100) {
+      cv::resize(img, resize_img, cv::Size(100, 32), 0.f, 0.f,
+                 cv::INTER_LINEAR);
+    } else {
+      cv::resize(img, resize_img, cv::Size(k, 32), 0.f, 0.f, cv::INTER_LINEAR);
+      cv::copyMakeBorder(resize_img, resize_img, 0, 0, 0, int(100 - k),
+                         cv::BORDER_CONSTANT, {127, 127, 127});
+    }
+  }
 }
 
 void ClsResizeImg::Run(const cv::Mat &img, cv::Mat &resize_img,
@@ -134,11 +142,15 @@ void ClsResizeImg::Run(const cv::Mat &img, cv::Mat &resize_img,
   else
     resize_w = int(ceilf(imgH * ratio));
 
-  cv::resize(img, resize_img, cv::Size(resize_w, imgH), 0.f, 0.f,
-             cv::INTER_LINEAR);
-  if (resize_w < imgW) {
-    cv::copyMakeBorder(resize_img, resize_img, 0, 0, 0, imgW - resize_w,
-                       cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+  if (!use_tensorrt) {
+    cv::resize(img, resize_img, cv::Size(resize_w, imgH), 0.f, 0.f,
+               cv::INTER_LINEAR);
+    if (resize_w < imgW) {
+      cv::copyMakeBorder(resize_img, resize_img, 0, 0, 0, imgW - resize_w,
+                         cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    }
+  } else {
+    cv::resize(img, resize_img, cv::Size(100, 32), 0.f, 0.f, cv::INTER_LINEAR);
   }
 }
 

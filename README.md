@@ -166,13 +166,13 @@ apt install libsm6
 apt install libxrender1
 
 # 离线下载 python 安装包 由于构建时经常重试所以下载离线包调试速度会加快
-pip download -r requirements.txt -i https://mirror.baidu.com/pypi/simple -d ./pg
-pip download paddlepaddle==2.2.2 -i https://mirror.baidu.com/pypi/simple -d ./pg
-pip download paddlehub -i https://mirror.baidu.com/pypi/simple -d ./pg
+pip download -r requirements.txt -d ./pg
+pip download paddlepaddle==2.0.2 -i https://mirror.baidu.com/pypi/simple -d ./pg
+pip download paddlehub -d ./pg
 
 # 安装 python 包
-pip install -r requirements.txt --no-index --find-links ./pg
-pip install paddlepaddle --no-index --find-links ./pg
+pip install -r requirements.txt --find-links ./pg
+pip install paddlepaddle --find-links ./pg
 pip install paddlehub -U --no-index --find-links ./pg
 
 ```
@@ -415,6 +415,38 @@ s deploy
 
 执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
 
+
+# 使用服务端模型
+
+dockerfile 文件修改为以下内容
+
+```
+RUN mkdir -p /PaddleOCR/inference/
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_det_infer.tar -C /PaddleOCR/inference/
+
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_cls_infer.tar -C /PaddleOCR/inference/
+
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_server_v2.0_rec_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_server_v2.0_rec_infer.tar -C /PaddleOCR/inference/
+```
+
+`\PaddleOCR\deploy\hubserving\ocr_rec\params.py`
+
+```
+    # cfg.rec_model_dir = "./inference/ch_ppocr_mobile_v2.0_rec_infer/"
+    cfg.rec_model_dir = "./inference/ch_ppocr_server_v2.0_rec_infer/"
+```
+
+`\PaddleOCR\deploy\hubserving\ocr_system\params.py`
+
+```
+    # cfg.rec_model_dir = "./inference/ch_ppocr_mobile_v2.0_rec_infer/"
+    cfg.rec_model_dir = "./inference/ch_ppocr_server_v2.0_rec_infer/"
+```
+
+
 # 总结
 
 在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中，可提供稳定可靠弹性的推理服务。
@@ -422,7 +454,6 @@ s deploy
 在构建镜像方面，[飞浆官方提供的 docker 镜像](https://hub.docker.com/r/paddlepaddle/paddle/tags?page=1&ordering=last_updated)，动辄 4GB、8GB，在镜像如此大的情况下基本无缘 Serverless 。
 
 本文所构建的的镜像仅 564MB ，在 Serverless 架构下部署 ，启动速度理想。
-
 
 # 鸣谢
 

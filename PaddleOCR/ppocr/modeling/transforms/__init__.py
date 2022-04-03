@@ -17,9 +17,8 @@ __all__ = ['build_transform']
 
 def build_transform(config):
     from .tps import TPS
-    from .stn import STN_ON
 
-    support_dict = ['TPS', 'STN_ON']
+    support_dict = ['TPS']
 
     module_name = config.pop('name')
     assert module_name in support_dict, Exception(

@@ -319,7 +319,9 @@ class PrepareEncoder(nn.Layer):
         self.src_emb_dim = src_emb_dim
         self.src_max_len = src_max_len
         self.emb = paddle.nn.Embedding(
-            num_embeddings=self.src_max_len, embedding_dim=self.src_emb_dim)
+            num_embeddings=self.src_max_len,
+            embedding_dim=self.src_emb_dim,
+            sparse=True)
         self.dropout_rate = dropout_rate
 
     def forward(self, src_word, src_pos):

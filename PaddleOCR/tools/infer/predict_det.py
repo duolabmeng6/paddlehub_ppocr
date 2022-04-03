@@ -30,7 +30,7 @@ from ppocr.utils.logging import get_logger
 from ppocr.utils.utility import get_image_file_list, check_and_read_gif
 from ppocr.data import create_operators, transform
 from ppocr.postprocess import build_post_process
-import json
+
 logger = get_logger()
 
 
@@ -38,11 +38,10 @@ class TextDetector(object):
     def __init__(self, args):
         self.args = args
         self.det_algorithm = args.det_algorithm
-        self.use_onnx = args.use_onnx
         pre_process_list = [{
             'DetResizeForTest': {
                 'limit_side_len': args.det_limit_side_len,
-                'limit_type': args.det_limit_type,
+                'limit_type': args.det_limit_type
             }
         }, {
             'NormalizeImage': {
@@ -90,51 +89,15 @@ class TextDetector(object):
                 postprocess_params["sample_pts_num"] = 2
                 postprocess_params["expand_scale"] = 1.0
                 postprocess_params["shrink_ratio_of_width"] = 0.3
-        elif self.det_algorithm == "PSE":
-            postprocess_params['name'] = 'PSEPostProcess'
-            postprocess_params["thresh"] = args.det_pse_thresh
-            postprocess_params["box_thresh"] = args.det_pse_box_thresh
-            postprocess_params["min_area"] = args.det_pse_min_area
-            postprocess_params["box_type"] = args.det_pse_box_type
-            postprocess_params["scale"] = args.det_pse_scale
-            self.det_pse_box_type = args.det_pse_box_type
         else:
             logger.info("unknown det_algorithm:{}".format(self.det_algorithm))
             sys.exit(0)
 
-        self.postprocess_op = build_post_process(postprocess_params)
-        self.predictor, self.input_tensor, self.output_tensors, self.config = utility.create_predictor(
-            args, 'det', logger)
-
-        if self.use_onnx:
-            img_h, img_w = self.input_tensor.shape[2:]
-            if img_h is not None and img_w is not None and img_h > 0 and img_w > 0:
-                pre_process_list[0] = {
-                    'DetResizeForTest': {
-                        'image_shape': [img_h, img_w]
-                    }
-                }
         self.preprocess_op = create_operators(pre_process_list)
-
-        if args.benchmark:
-            import auto_log
-            pid = os.getpid()
-            gpu_id = utility.get_infer_gpuid()
-            self.autolog = auto_log.AutoLogger(
-                model_name="det",
-                model_precision=args.precision,
-                batch_size=1,
-                data_shape="dynamic",
-                save_path=None,
-                inference_config=self.config,
-                pids=pid,
-                process_name=None,
-                gpu_ids=gpu_id if args.use_gpu else None,
-                time_keys=[
-                    'preprocess_time', 'inference_time', 'postprocess_time'
-                ],
-                warmup=2,
-                logger=logger)
+        self.postprocess_op = build_post_process(postprocess_params)
+        self.predictor, self.input_tensor, self.output_tensors = utility.create_predictor(
+            args, 'det', logger)  # paddle.jit.load(args.det_model_dir)
+        # self.predictor.eval()
 
     def order_points_clockwise(self, pts):
         """
@@ -192,12 +155,6 @@ class TextDetector(object):
     def __call__(self, img):
         ori_im = img.copy()
         data = {'image': img}
-
-        st = time.time()
-
-        if self.args.benchmark:
-            self.autolog.times.start()
-
         data = transform(data, self.preprocess_op)
         img, shape_list = data
         if img is None:
@@ -205,22 +162,13 @@ class TextDetector(object):
         img = np.expand_dims(img, axis=0)
         shape_list = np.expand_dims(shape_list, axis=0)
         img = img.copy()
-
-        if self.args.benchmark:
-            self.autolog.times.stamp()
-        if self.use_onnx:
-            input_dict = {}
-            input_dict[self.input_tensor.name] = img
-            outputs = self.predictor.run(self.output_tensors, input_dict)
-        else:
-            self.input_tensor.copy_from_cpu(img)
-            self.predictor.run()
-            outputs = []
-            for output_tensor in self.output_tensors:
-                output = output_tensor.copy_to_cpu()
-                outputs.append(output)
-            if self.args.benchmark:
-                self.autolog.times.stamp()
+        starttime = time.time()
+        self.input_tensor.copy_from_cpu(img)
+        self.predictor.run()
+        outputs = []
+        for output_tensor in self.output_tensors:
+            output = output_tensor.copy_to_cpu()
+            outputs.append(output)
 
         preds = {}
         if self.det_algorithm == "EAST":
@@ -231,25 +179,19 @@ class TextDetector(object):
             preds['f_score'] = outputs[1]
             preds['f_tco'] = outputs[2]
             preds['f_tvo'] = outputs[3]
-        elif self.det_algorithm in ['DB', 'PSE']:
+        elif self.det_algorithm == 'DB':
             preds['maps'] = outputs[0]
         else:
             raise NotImplementedError
-
-        #self.predictor.try_shrink_memory()
+        self.predictor.try_shrink_memory()
         post_result = self.postprocess_op(preds, shape_list)
         dt_boxes = post_result[0]['points']
-        if (self.det_algorithm == "SAST" and
-                self.det_sast_polygon) or (self.det_algorithm == "PSE" and
-                                           self.det_pse_box_type == 'poly'):
+        if self.det_algorithm == "SAST" and self.det_sast_polygon:
             dt_boxes = self.filter_tag_det_res_only_clip(dt_boxes, ori_im.shape)
         else:
             dt_boxes = self.filter_tag_det_res(dt_boxes, ori_im.shape)
-
-        if self.args.benchmark:
-            self.autolog.times.end(stamp=True)
-        et = time.time()
-        return dt_boxes, et - st
+        elapse = time.time() - starttime
+        return dt_boxes, elapse
 
 
 if __name__ == "__main__":
@@ -259,15 +201,8 @@ if __name__ == "__main__":
     count = 0
     total_time = 0
     draw_img_save = "./inference_results"
-
-    if args.warmup:
-        img = np.random.uniform(0, 255, [640, 640, 3]).astype(np.uint8)
-        for i in range(2):
-            res = text_detector(img)
-
     if not os.path.exists(draw_img_save):
         os.makedirs(draw_img_save)
-    save_results = []
     for image_file in image_file_list:
         img, flag = check_and_read_gif(image_file)
         if not flag:
@@ -275,26 +210,16 @@ if __name__ == "__main__":
         if img is None:
             logger.info("error in loading image:{}".format(image_file))
             continue
-        st = time.time()
-        dt_boxes, _ = text_detector(img)
-        elapse = time.time() - st
+        dt_boxes, elapse = text_detector(img)
         if count > 0:
             total_time += elapse
         count += 1
-        save_pred = os.path.basename(image_file) + "\t" + str(
-            json.dumps(np.array(dt_boxes).astype(np.int32).tolist())) + "\n"
-        save_results.append(save_pred)
-        logger.info(save_pred)
-        logger.info("The predict time of {}: {}".format(image_file, elapse))
+        logger.info("Predict time of {}: {}".format(image_file, elapse))
         src_im = utility.draw_text_det_res(dt_boxes, image_file)
         img_name_pure = os.path.split(image_file)[-1]
         img_path = os.path.join(draw_img_save,
                                 "det_res_{}".format(img_name_pure))
         cv2.imwrite(img_path, src_im)
         logger.info("The visualized image saved in {}".format(img_path))
-
-    with open(os.path.join(draw_img_save, "det_results.txt"), 'w') as f:
-        f.writelines(save_results)
-        f.close()
-    if args.benchmark:
-        text_detector.autolog.report()
+    if count > 1:
+        logger.info("Avg Time: {}".format(total_time / (count - 1)))

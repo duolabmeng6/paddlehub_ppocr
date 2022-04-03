@@ -1,18 +1,18 @@
-FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base20220403
+FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
 
 COPY PaddleOCR /PaddleOCR
 
 WORKDIR /PaddleOCR
 
 RUN mkdir -p /PaddleOCR/inference/
-ADD https://paddleocr.bj.bcebos.com/PP-OCRv2/chinese/ch_PP-OCRv2_det_infer.tar /PaddleOCR/inference/
-RUN tar xf /PaddleOCR/inference/ch_PP-OCRv2_det_infer.tar -C /PaddleOCR/inference/
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_det_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_det_infer.tar -C /PaddleOCR/inference/
 
 ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_infer.tar /PaddleOCR/inference/
 RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_cls_infer.tar -C /PaddleOCR/inference/
 
-ADD https://paddleocr.bj.bcebos.com/PP-OCRv2/chinese/ch_PP-OCRv2_rec_infer.tar /PaddleOCR/inference/
-RUN tar xf /PaddleOCR/inference/ch_PP-OCRv2_rec_infer.tar -C /PaddleOCR/inference/
+ADD https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_rec_infer.tar /PaddleOCR/inference/
+RUN tar xf /PaddleOCR/inference/ch_ppocr_mobile_v2.0_rec_infer.tar -C /PaddleOCR/inference/
 
 RUN hub install deploy/hubserving/ocr_system/
 RUN hub install deploy/hubserving/ocr_cls/

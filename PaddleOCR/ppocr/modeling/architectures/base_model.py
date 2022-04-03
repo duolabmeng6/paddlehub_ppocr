@@ -1,4 +1,4 @@
-# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
+# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
 from paddle import nn
 from ppocr.modeling.transforms import build_transform
 from ppocr.modeling.backbones import build_backbone
@@ -31,6 +32,7 @@ class BaseModel(nn.Layer):
             config (dict): the super parameters for module.
         """
         super(BaseModel, self).__init__()
+
         in_channels = config.get('in_channels', 3)
         model_type = config['model_type']
         # build transfrom,
@@ -66,23 +68,14 @@ class BaseModel(nn.Layer):
         config["Head"]['in_channels'] = in_channels
         self.head = build_head(config["Head"])
 
-        self.return_all_feats = config.get("return_all_feats", False)
-
     def forward(self, x, data=None):
-        y = dict()
         if self.use_transform:
             x = self.transform(x)
         x = self.backbone(x)
-        y["backbone_out"] = x
         if self.use_neck:
             x = self.neck(x)
-        y["neck_out"] = x
-        x = self.head(x, targets=data)
-        if isinstance(x, dict):
-            y.update(x)
+        if data is None:
+            x = self.head(x)
         else:
-            y["head_out"] = x
-        if self.return_all_feats:
-            return y
-        else:
-            return x
+            x = self.head(x, data)
+        return x

@@ -13,19 +13,12 @@
 # limitations under the License.
 
 import Levenshtein
-import string
 
 
 class RecMetric(object):
-    def __init__(self, main_indicator='acc', is_filter=False, **kwargs):
+    def __init__(self, main_indicator='acc', **kwargs):
         self.main_indicator = main_indicator
-        self.is_filter = is_filter
         self.reset()
-
-    def _normalize_text(self, text):
-        text = ''.join(
-            filter(lambda x: x in (string.digits + string.ascii_letters), text))
-        return text.lower()
 
     def __call__(self, pred_label, *args, **kwargs):
         preds, labels = pred_label
@@ -35,9 +28,6 @@ class RecMetric(object):
         for (pred, pred_conf), (target, _) in zip(preds, labels):
             pred = pred.replace(" ", "")
             target = target.replace(" ", "")
-            if self.is_filter:
-                pred = self._normalize_text(pred)
-                target = self._normalize_text(target)
             norm_edit_dis += Levenshtein.distance(pred, target) / max(
                 len(pred), len(target), 1)
             if pred == target:
@@ -48,7 +38,7 @@ class RecMetric(object):
         self.norm_edit_dis += norm_edit_dis
         return {
             'acc': correct_num / all_num,
-            'norm_edit_dis': 1 - norm_edit_dis / (all_num + 1e-3)
+            'norm_edit_dis': 1 - norm_edit_dis / all_num
         }
 
     def get_metric(self):
@@ -58,8 +48,8 @@ class RecMetric(object):
                  'norm_edit_dis': 0,
             }
         """
-        acc = 1.0 * self.correct_num / (self.all_num + 1e-3)
-        norm_edit_dis = 1 - self.norm_edit_dis / (self.all_num + 1e-3)
+        acc = 1.0 * self.correct_num / self.all_num
+        norm_edit_dis = 1 - self.norm_edit_dis / self.all_num
         self.reset()
         return {'acc': acc, 'norm_edit_dis': norm_edit_dis}
 
