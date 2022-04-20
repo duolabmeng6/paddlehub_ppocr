@@ -92,7 +92,7 @@
 </div>
 <script>
     document.getElementById("appUrl").href = "https://fcnext.console.aliyun.com/applications/create?template=" + appName
-    document.getElementById("url").innerText = window.location.protocol + window.location.host + uri
+    document.getElementById("url").innerText = window.location.protocol + '//' + window.location.host + uri
     document.getElementById("args").innerText = `  Headers:
      Content-type: application/json
   Body:
@@ -106,7 +106,7 @@ def getResult(imagePath):
         data = f.read()
     image = str(base64.b64encode(data), encoding='utf-8')
     data = '{"images":["' + image + '"]}'
-    txt = requests.post("${window.location.protocol + window.location.host + uri}", data=data,
+    txt = requests.post("${window.location.protocol + '//' + window.location.host + uri}", data=data,
                         headers={'Content-Type': 'application/json'})
     return txt.content.decode("utf-8")
 

@@ -12,13 +12,13 @@ services:
   framework:
     component: fc
     props:
-      region: cn-shenzhen
+      region: ${vars.region}
       service:
         name: ${vars.service.name}
         description: ${vars.service.description}
         internetAccess: true
         role:
-          name: qianfeng-fc-deploy-role
+          name: paddleocrrole
           policies:
             - AliyunContainerRegistryReadOnlyAccess
       function:
@@ -30,7 +30,7 @@ services:
         codeUri: ./
         timeout: 60
         customContainerConfig:
-          image: registry-vpc.cn-shenzhen.aliyuncs.com/duolabmeng/ppocr:1.8
+          image: registry-vpc.${vars.region}.aliyuncs.com/duolabmeng/ppocr:1.8
           command: '["sh","/PaddleOCR/start.sh"]'
         environmentVariables:
           testEnv: true
