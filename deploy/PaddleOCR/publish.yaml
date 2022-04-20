@@ -11,7 +11,7 @@ Type: Application
 Name: PaddleOCR
 Provider:
   - 阿里云
-Version: 0.0.13
+Version: 0.0.14
 Description: 快速部署PaddleOCR
 HomePage: https://github.com/duolabmeng6/paddlehub_ppocr
 Tags: #标签详情
