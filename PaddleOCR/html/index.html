@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基于 Serverless 部署PaddleOCR图文识别</title>
+    <link href="https://www.bootcss.com/p/layoutit/css/bootstrap-combined.min.css" rel="stylesheet">
+    <script>
+        var image = undefined
+        var uri = '/predict/ocr_system'
+        var appName = 'PaddleOCR'
+
+        function getSentence() {
+            document.getElementById("result").innerText = "预测中 ..."
+            const xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+            xmlhttp.open("POST", uri, false);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("result").innerText = xmlhttp.responseText
+                }
+            }
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            image = image.substring( image.indexOf( "," ) + 1 );
+            data = '{"images":["' + image + '"]}'
+            xmlhttp.send(data);
+        }
+
+        function getImage(file) {
+            const reader = new FileReader();
+            const img = document.getElementById('img');
+
+            //读取File对象的数据
+            reader.onload = function (evt) {
+                img.src = evt.target.result;
+                image = evt.target.result
+            }
+            reader.readAsDataURL(file.files[0]);
+        }
+    </script>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 10px">
+    <div class="row-fluid">
+        <div class="span12">
+            <center>
+                <h3>
+                    基于 Serverless 部署PaddleOCR图文识别
+                </h3>
+            </center>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2">
+        </div>
+        <div class="span8">
+            <fieldset>
+                <legend>说明：</legend>
+                本应用基于 Serverless Devs 进行部署，可通过 <a id="appUrl">Serverless 应用中心一键体验</a>。
+                <br>
+                <br>
+                本应用的教程<a href="https://github.com/duolabmeng6/paddlehub_ppocr">基于 Serverless 架构部署通用文字识别 PaddleOCR</a>
+                <br><h5>接口文档：</h5>
+                <p>地址：：</p>
+                <pre id="url"></pre>
+                <p>参数：</p>
+                <pre id="args"></pre>
+                <p>案例：</p>
+                <pre id="example"></pre>
+            </fieldset>
+        </div>
+        <div class="span2">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2">
+        </div>
+        <div class="span8">
+            <center>
+                <img src="" id="img"/>
+                <br><br>
+                <p id="result"></p>
+            </center>
+            <fieldset>
+                <legend id="action">体验：</legend>
+                <input type="file" id="upload" onchange="getImage(this)"/>
+                <button class="btn" onclick="getSentence()">图像预测</button>
+            </fieldset>
+
+        </div>
+        <div class="span2">
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("appUrl").href = "https://fcnext.console.aliyun.com/applications/create?template=" + appName
+    document.getElementById("url").innerText = window.location.protocol + window.location.host + uri
+    document.getElementById("args").innerText = `  Headers:
+     Content-type: application/json
+  Body:
+      {"images":["图片Base64后的字符串"]}`
+
+    document.getElementById("example").innerText = `import requests
+import base64
+
+def getResult(imagePath):
+    with open(imagePath, 'rb') as f:
+        data = f.read()
+    image = str(base64.b64encode(data), encoding='utf-8')
+    data = '{"images":["' + image + '"]}'
+    txt = requests.post("${window.location.protocol + window.location.host + uri}", data=data,
+                        headers={'Content-Type': 'application/json'})
+    return txt.content.decode("utf-8")
+
+print(getResult("./test.png"))`
+</script>
+</body>
+</html>

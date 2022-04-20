@@ -30,7 +30,7 @@ services:
         codeUri: ./
         timeout: 60
         customContainerConfig:
-          image: registry-vpc.cn-shenzhen.aliyuncs.com/duolabmeng/ppocr:1.2
+          image: registry-vpc.cn-shenzhen.aliyuncs.com/duolabmeng/ppocr:1.8
           command: '["sh","/PaddleOCR/start.sh"]'
         environmentVariables:
           testEnv: true
