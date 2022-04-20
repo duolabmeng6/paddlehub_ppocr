@@ -11,7 +11,7 @@ Type: Application
 Name: PaddleOCR
 Provider:
   - 阿里云
-Version: 0.0.14
+Version: 0.0.15
 Description: PaddleOCR 是百度开源的 PaddlePaddle 项目，基于 PaddleOCR，可以快速实现通用 OCR 能力
 HomePage: https://github.com/duolabmeng6/paddlehub_ppocr
 Tags: #标签详情
@@ -31,6 +31,7 @@ Parameters:
     - region
     - serviceName
     - functionName
+    - memorySize
   properties:
     region:
       title: 地域
@@ -39,6 +40,14 @@ Parameters:
       description: 创建应用所在的地区
       enum:
         - cn-shenzhen
+        - cn-beijing
+        - cn-hangzhou
+        - cn-shanghai
+        - cn-qingdao
+        - cn-zhangjiakou
+        - cn-huhehaote
+        - cn-chengdu
+        - cn-hongkong
     serviceName:
       title: 服务名
       type: string
@@ -49,3 +58,8 @@ Parameters:
       type: string
       default: PaddleOCR
       description:  函数名称，只能包含字母、数字、下划线和中划线。不能以数字、中划线开头。长度在 1-64 之间
+    memorySize:
+      title: 内存规格
+      type: string
+      default: 2048
+      description:  内存规格，单位为 MB，默认为 2048 MB
