@@ -1,0 +1,50 @@
+# 规范文档参考:
+# 中文：https://github.com/Serverless-Devs/Serverless-Devs/blob/master/spec/zh/0.0.2/serverless_package_model/3.package_model.md#应用模型规范
+# English: https://github.com/Serverless-Devs/Serverless-Devs/blob/master/spec/en/0.0.2/serverless_package_model/3.package_model.md#Application-model-specification
+# --------------
+# Package 开发发布最佳实践:
+#   - [社区讨论 #62](https://github.com/Serverless-Devs/Serverless-Devs/discussions/62);
+#   - [社区讨论 #407](https://github.com/Serverless-Devs/Serverless-Devs/discussions/407);
+#   - [社区讨论 #439](https://github.com/Serverless-Devs/Serverless-Devs/discussions/439);
+
+Type: Application
+Name: PaddleOCR
+Provider:
+  - 阿里云
+Version: 0.0.10
+Description: 快速部署PaddleOCR
+HomePage: https://github.com/duolabmeng6/paddlehub_ppocr
+Tags: #标签详情
+  - 部署函数
+  - 部署组件
+Category: 图文处理 # 基础云服务/Web框架/Web应用/人工智能/音视频处理/图文处理/监控告警/大数据/IoT/新手入门/其他
+Service: # 使用的服务
+  函数计算: # 函数计算/容器服务/镜像服务/消息队列/工作流/CDN/对象存储/表格存储/MNS/日志服务/API网关/数据库/解析服务/云应用/其他
+    # Runtime: Python 3.6 如果服务是函数，还需要增加Runtime
+    Authorities: #权限描述
+      - 创建函数 # 所需要的权限
+Parameters:
+  type: object
+  additionalProperties: false # 不允许增加其他属性
+  required: # 必填项
+    - region
+    - serviceName
+    - functionName
+  properties:
+    region:
+      title: 地域
+      type: string
+      default: cn-shenzhen
+      description: 创建应用所在的地区
+      enum:
+        - cn-shenzhen
+    serviceName:
+      title: 服务名
+      type: string
+      default: PaddleOCR
+      description: 服务名称，只能包含字母、数字、下划线和中划线。不能以数字、中划线开头。长度在 1-128 之间
+    functionName:
+      title: 函数名
+      type: string
+      default: PaddleOCR
+      description:  函数名称，只能包含字母、数字、下划线和中划线。不能以数字、中划线开头。长度在 1-64 之间
