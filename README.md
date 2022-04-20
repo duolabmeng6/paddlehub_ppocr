@@ -90,6 +90,9 @@ print(ocr("./test.png"))
 
 ## 部署到阿里云函数计算
 
+最简单的方法 [Serverless 应用中心一键体验 PaddleOCR](https://fcnext.console.aliyun.com/applications/create?template=PaddleOCR)
+
+
 在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
 
 函数计算地区选择香港
