@@ -422,6 +422,30 @@ s deploy
 
 执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
 
+# Serverless应用中心 应用上架
+
+
+快速完成 Serverless Devs 应用开发并发布到 Regsitry https://github.com/Serverless-Devs/Serverless-Devs/discussions/439
+
+参考视频教程 https://example-static.oss-cn-beijing.aliyuncs.com/video/202203231823.mp4
+
+提交申请 https://survey.aliyun.com/apps/zhiliao/YdBrsSK0f
+
+经验之谈
+
+建议看完视频 直接下载项目 todolist-app 然后修修改改
+
+https://github.com/devsapp/start-web-framework/tree/master/example/todolist-app
+
+```shell
+s cli registry login # 登录授权 一次就行
+s cli registry publish # 发布包
+s cli registry list # 查看子机已发布的包
+
+s init PaddleOCR # 自己测试应用的效果
+s deploy # 部署项目试试
+```
+
 
 # 使用服务端模型
 
