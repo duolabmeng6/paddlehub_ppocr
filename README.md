@@ -21,6 +21,10 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 * 熟练的使用各厂商提供的 Serverless 服务，部署。
 * 制作小巧精良的 docker 镜像
 
+
+[docker制作paddleocr镜像部署到函数计算](https://www.bilibili.com/video/BV1iY411P7Dp/) 
+[视频的项目资源](https://github.com/duolabmeng6/docker_paddle_ocr)
+
 # 开箱即用
 
 这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器，阿里云函数计算，腾讯云函数中提供通用文字识别 api 接口。
