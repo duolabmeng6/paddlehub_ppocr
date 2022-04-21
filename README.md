@@ -36,9 +36,6 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 [PaddleOCR docker官网的 镜像地址](https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr)
 
 ```shell
-# 腾讯云的镜像仓库地址
-docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
-
 # 阿里云的镜像仓库地址
 docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.8 /bin/bash -c "sh /PaddleOCR/start.sh"
 
