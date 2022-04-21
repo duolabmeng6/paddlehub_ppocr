@@ -11,7 +11,7 @@ Type: Application
 Name: PaddleOCR
 Provider:
   - 阿里云
-Version: 0.0.15
+Version: 0.0.16
 Description: PaddleOCR 是百度开源的 PaddlePaddle 项目，基于 PaddleOCR，可以快速实现通用 OCR 能力
 HomePage: https://github.com/duolabmeng6/paddlehub_ppocr
 Tags: #标签详情

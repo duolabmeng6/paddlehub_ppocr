@@ -23,23 +23,20 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 
 # 开箱即用
 
-这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器，阿里云函数计算，腾讯云函数中提供通用文字识别 api 接口
+这里提供了开箱即用的 docker 镜像，可直接将 PaddleOCR 部署到本地服务器，阿里云函数计算，腾讯云函数中提供通用文字识别 api 接口。
 
-[PaddleOCR docker 镜像地址](https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr)
+[阿里云Serverless 应用中心一键体验 PaddleOCR](https://fcnext.console.aliyun.com/applications/create?template=PaddleOCR)
 
-## 部署 PaddleOCR 到本地
+## 1. 部署 PaddleOCR 到本地
 
-如果国外访问太慢可使用国内的仓库地址
+[PaddleOCR docker官网的 镜像地址](https://hub.docker.com/repository/docker/duolabmeng666/paddlehub_ppocr)
 
 ```shell
-# docker hub 仓库的地址 (国外地址较慢)
-docker run -itd --name ppocr -p 9000:9000 duolabmeng666/paddlehub_ppocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
-
 # 腾讯云的镜像仓库地址
 docker run -itd --name ppocr -p 9000:9000 ccr.ccs.tencentyun.com/llapi/pphubocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
 
 # 阿里云的镜像仓库地址
-docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0 /bin/bash -c "sh /PaddleOCR/start.sh"
+docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.8 /bin/bash -c "sh /PaddleOCR/start.sh"
 
 # 阿里云的镜像仓库地址 服务器端模型
 docker run -itd --name ppocr -p 9000:9000 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.6.server /bin/bash -c "sh /PaddleOCR/start.sh"
@@ -88,47 +85,17 @@ print(ocr("./test.png"))
 ```
 
 
-## 部署到阿里云函数计算
+## 2. 部署到阿里云函数计算
 
-最简单的方法 [Serverless 应用中心一键体验 PaddleOCR](https://fcnext.console.aliyun.com/applications/create?template=PaddleOCR)
+非常简单~
+
+ [Serverless 应用中心一键体验 PaddleOCR](https://fcnext.console.aliyun.com/applications/create?template=PaddleOCR)
+
+## 3. 部署到腾讯云函数
+
+比较麻烦请看下面的教程 
 
 
-在阿里云函数计算控制台中， 新建服务，创建函数，根据下面信息填写，创建函数后，绑定域名即可提供 api 识别接口。
-
-函数计算地区选择香港
-
-容器镜像地址 `registry-vpc.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0`
-
-这是server版本的容器镜像 `registry-vpc.cn-hongkong.aliyuncs.com/llapi/ppocr:1.6.server`
-
-启动命令 `["sh","/PaddleOCR/start.sh"]`
-
-需要绑定域名
-
-识别地址就是 http://绑定域名/predict/ocr_system
-
-![2](./demo/2.png)
-
-![3](./demo/3.png)
-
-## 部署到腾讯云函数
-
-在腾讯云函数控制台中，需要将镜像推送至自己账户中的镜像仓库，随后创建云函数，即可提供 api 识别接口。
-
-1. 需要将镜像推送至腾讯云的镜像仓库
-2. 创建云函数
-
-```shell
-docker pull duolabmeng666/paddlehub_ppocr:1.2
-docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
-docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
-```
-推送镜像至腾讯云以后就可以创建云函数了
-
-识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
-
-![4](./demo/4.png)
-![5](./demo/5.png)
 
 # 项目开发
 
@@ -168,6 +135,27 @@ docker exec -it testppocr /bin/bash
 
 > 确定系统需要什么依赖，是通过代码运行来确定的。`docker exec -it testppocr /bin/bash` 进入运行好的基础环境，进入容器内终端后，运行你的代码，确定所需要安装的依赖。 
 
+`requirements.txt ` 这里需要注意依赖包的版本，否则版本太高了会失败。建议固定版本，防止以后没有办法重建镜像。
+
+```
+shapely==1.8.1.post1
+scikit-image==0.17.2
+imgaug==0.4.0
+pyclipper==1.3.0.post2
+lmdb==1.3.0
+tqdm==4.64.0
+numpy==1.21.6
+visualdl==2.2.3
+python-Levenshtein==0.12.2
+opencv-contrib-python==4.2.0.32
+paddlenlp==2.0.0
+paddle2onnx==0.5.1
+paddlepaddle==2.0.2
+paddlehub==2.1.0
+```
+
+开始安装系统依赖和python依赖
+
 ```shell
 apt install g++
 apt install libglib2.0-dev
@@ -187,7 +175,7 @@ pip install paddlehub -U --no-index --find-links ./pg
 
 ```
 
-用 PaddleHub Serving 的服务部署
+## 3. 用 PaddleHub Serving 的服务部署
 
 ```shell
 hub install deploy/hubserving/ocr_system/
@@ -226,7 +214,7 @@ docker tag paddlehub_ppocr:1.0 registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 ```
 
-## 编写 Dockerfile
+## 4. 编写 Dockerfile
 
 上面的过程是构建飞浆的基础运行环境的 那么以后就可以用该基础镜像部署任意飞浆模型了
 
@@ -287,8 +275,26 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 ![3](./demo/3.png)
 
-
 ## 部署到腾讯云函数
+
+这里已经准备好可用镜像了
+
+在腾讯云函数控制台中，需要将镜像推送至自己账户中的镜像仓库，随后创建云函数，即可提供 api 识别接口。
+
+1. 需要将镜像推送至腾讯云的镜像仓库
+2. 创建云函数
+
+```shell
+docker pull duolabmeng666/paddlehub_ppocr:1.2
+docker tag duolabmeng666/paddlehub_ppocr:1.2 ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
+docker push ccr.ccs.tencentyun.com/llapixxx/ppocr:1.2
+```
+
+推送镜像至腾讯云以后就可以创建云函数了
+
+识别地址就是 https://创建云函数后可以看到.gz.apigw.tencentcs.com/release/predict/ocr_system
+
+
 
 由于腾讯云云函数容器的文件的限制只允许 `/tmp` 可读可写，所以我们需要修改代码以支持云函数的部署。
 
@@ -393,6 +399,10 @@ docker push ccr.ccs.tencentyun.com/llapi/pphubocr:1.2
 
 ![4](./demo/4.png)
 ![5](./demo/5.png)
+
+
+
+
 
 ## 使用 Serverless Devs 部署到阿里云函数计算
 
