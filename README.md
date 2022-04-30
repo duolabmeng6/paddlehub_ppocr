@@ -1,7 +1,7 @@
 # 基于 Serverless 架构部署通用文字识别 PaddleOCR
 
-[![github stars](相关资料.assets/paddlehub_ppocr.svg)](https://github.com/duolabmeng6/paddlehub_ppocr)
-[![gitee stars](相关资料.assets/star.svg)](https://gitee.com/duolabmeng666/paddlehub_ppocr/stargazers)
+[![github stars](https://img.shields.io/github/stars/duolabmeng6/paddlehub_ppocr?style=social)](https://github.com/duolabmeng6/paddlehub_ppocr)
+[![gitee stars](https://gitee.com/duolabmeng666/paddlehub_ppocr/badge/star.svg?theme=dark)](https://gitee.com/duolabmeng666/paddlehub_ppocr/stargazers)
 
 # 项目背景
 
@@ -122,7 +122,7 @@ PaddleOCR
 ```shell
 # 创建 python 的基础的运行环境
 docker run -itd --name testppocr -p 9000:9000 -v /test_ppocr:/test_ppocr python:3.7.10-slim /bin/bash #
-# 进入容器内安装飞浆的运行环境
+# 进入容器内安装飞桨的运行环境
 docker exec -it testppocr /bin/bash 
 ```
 
@@ -428,7 +428,6 @@ s config add
 # 部署ppocr
 s deploy
 ```
-
 ![5](./demo/7.png)
 
 执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
