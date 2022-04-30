@@ -1,7 +1,7 @@
 # 基于 Serverless 架构部署通用文字识别 PaddleOCR
 
-[![github stars](https://img.shields.io/github/stars/duolabmeng6/paddlehub_ppocr?style=social)](https://github.com/duolabmeng6/paddlehub_ppocr)
-[![gitee stars](https://gitee.com/duolabmeng666/paddlehub_ppocr/badge/star.svg?theme=dark)](https://gitee.com/duolabmeng666/paddlehub_ppocr/stargazers)
+[![github stars](相关资料.assets/paddlehub_ppocr.svg)](https://github.com/duolabmeng6/paddlehub_ppocr)
+[![gitee stars](相关资料.assets/star.svg)](https://gitee.com/duolabmeng666/paddlehub_ppocr/stargazers)
 
 # 项目背景
 
@@ -101,12 +101,12 @@ PaddleOCR
 
 步骤如下：
 
-1. 构建飞浆的运行环境
+1. 构建飞桨的运行环境
 2. 用 PaddleHub Serving 的服务部署
 3. 将 PaddleOCR 项目下载回来，编写 Dockerfile 文件
 4. 在 Serverless 架构的中部署
 
-# docker 中构建飞浆的运行环境
+# docker 中构建飞桨的运行环境
 
 ## 1.构建 python3.7 运行环境
 
@@ -213,7 +213,7 @@ docker push registry.cn-hongkong.aliyuncs.com/llapi/ppocr:1.0
 
 ## 4. 编写 Dockerfile
 
-上面的过程是构建飞浆的基础运行环境的 那么以后就可以用该基础镜像部署任意飞浆模型了
+上面的过程是构建飞桨的基础运行环境的 那么以后就可以用该基础镜像部署任意飞桨模型了
 
 ```
 FROM registry.cn-hongkong.aliyuncs.com/llapi/pphub:base
@@ -428,6 +428,7 @@ s config add
 # 部署ppocr
 s deploy
 ```
+
 ![5](./demo/7.png)
 
 执行成功以后就得到识别地址例如 `http://ppocr.ppocr.创建好以后你将看到.cn-shenzhen.fc.devsapp.net/predict/ocr_system`
@@ -492,7 +493,7 @@ RUN tar xf /PaddleOCR/inference/ch_ppocr_server_v2.0_rec_infer.tar -C /PaddleOCR
 
 在 Serverless 架构下部署深度学习模型变得非常简单且能提供无限的并发支持，我们可以将镜像部署到各个提供 Serverless 的服务商中，可提供稳定可靠弹性的推理服务。
 
-在构建镜像方面，[飞浆官方提供的 docker 镜像](https://hub.docker.com/r/paddlepaddle/paddle/tags?page=1&ordering=last_updated)，动辄 4GB、8GB，在镜像如此大的情况下基本无缘 Serverless 。
+在构建镜像方面，[飞桨官方提供的 docker 镜像](https://hub.docker.com/r/paddlepaddle/paddle/tags?page=1&ordering=last_updated)，动辄 4GB、8GB，在镜像如此大的情况下基本无缘 Serverless 。
 
 本文所构建的的镜像仅 564MB ，在 Serverless 架构下部署 ，启动速度理想。
 
@@ -500,7 +501,7 @@ RUN tar xf /PaddleOCR/inference/ch_ppocr_server_v2.0_rec_infer.tar -C /PaddleOCR
 
 感谢各厂商大佬提供的技术支持
 
-* 百度飞浆 https://www.paddlepaddle.org.cn/
+* 百度飞桨 https://www.paddlepaddle.org.cn/
 * PaddleOCR https://github.com/PaddlePaddle/PaddleOCR
 * 腾讯云函数 https://cloud.tencent.com/product/scf
 * 阿里云函数计算 https://www.aliyun.com/product/fc
