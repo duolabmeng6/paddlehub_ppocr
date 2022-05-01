@@ -107,6 +107,15 @@ print(ocr("./test.png"))
 </devgroup>
 
 
+```
 
+# 本应用的镜像开发教程
 
+https://github.com/duolabmeng6/paddlehub_ppocr
+
+阅读本文你将学会：
+
+在 Serverless 架构中 docker 镜像制作的最佳实践，游刃有余的部署复杂场景下的深度学习模型
+
+熟练的使用各厂商提供的 Serverless 服务，部署。
 

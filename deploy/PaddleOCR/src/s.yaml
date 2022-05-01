@@ -4,6 +4,7 @@ access: "{{ access }}"
 
 vars:
   region: "{{ region }}"
+  memorySize: "{{ memorySize }}"
   service:
     name: "{{ serviceName }}"
     description: '快速部署PaddleOCR 项目地址 https://github.com/duolabmeng6/paddlehub_ppocr'
@@ -25,7 +26,7 @@ services:
         name: "{{ functionName }}"
         description: ${vars.service.description}
         runtime: custom-container
-        memorySize: 2048
+        memorySize: ${vars.memorySize}
         caPort: 9000
         codeUri: ./
         timeout: 60
