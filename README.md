@@ -522,6 +522,3 @@ Serverless工程实践：从入门到进阶 https://item.jd.com/13366562.html
 # 赞赏
 
 如果觉得项目对你有帮助，可以请作者喝杯咖啡
-
-![swskm](https://github.com/user-attachments/assets/83557145-89aa-4c34-9cbf-a6e31701b702)
-
